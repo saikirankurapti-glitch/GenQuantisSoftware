@@ -61,7 +61,6 @@ jobs:
     needs: build
     environment:
       name: Production
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     steps:
       - name: Download deployment package
         uses: actions/download-artifact@v4
@@ -70,12 +69,9 @@ jobs:
           path: .
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ vars.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
           package: .
 
-      - name: Show deployed URL
-        run: echo "Deployment submitted to Azure App Service."
