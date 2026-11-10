@@ -1,5 +1,6 @@
 import emailjs from '@emailjs/browser';
 import { PartnerApplication } from '@/types/partnerPortal';
+import { API_BASE_URL } from '@/lib/partnerStore';
 
 // Official destination email for headquarters review
 export const GENQUANTIS_SUPPORT_EMAIL = 'support@genquantis.com';
@@ -261,7 +262,7 @@ export async function sendPartnerApplicationEmail(
 
   // 2. Notify Backend API to record & queue applicant notification
   try {
-    fetch('/api/partner/send-email-id', {
+    fetch(`${API_BASE_URL}/api/partner/send-email-id`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
