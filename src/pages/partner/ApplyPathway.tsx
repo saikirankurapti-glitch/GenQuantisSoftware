@@ -378,6 +378,7 @@ export const ApplyPathway: React.FC = () => {
       individual,
       business,
       territory,
+      declarations,
       documents: uploadedDocs,
       clarifications: [],
       auditLogs: [
