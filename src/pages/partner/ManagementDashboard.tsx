@@ -24,6 +24,7 @@ import {
   Calendar,
   CreditCard,
   Building,
+  Building2,
   TrendingUp,
   FileSignature,
   Download,
@@ -38,6 +39,7 @@ import {
   Loader2,
   ExternalLink,
   FileCheck,
+  FileCheck2,
   UploadCloud,
   Image as ImageIcon,
   ZoomIn,
@@ -46,7 +48,15 @@ import {
   Maximize2,
   Landmark,
   Copy,
-  ArrowLeft
+  ArrowLeft,
+  Briefcase,
+  GraduationCap,
+  Award,
+  Globe,
+  Printer,
+  CheckSquare,
+  Shield,
+  FileSpreadsheet
 } from 'lucide-react';
 
 export const ManagementDashboard: React.FC = () => {
@@ -104,6 +114,17 @@ export const ManagementDashboard: React.FC = () => {
   const [paymentRejectReason, setPaymentRejectReason] = useState<string>('');
   const [paymentActionFeedback, setPaymentActionFeedback] = useState<{ success: boolean; message: string } | null>(null);
   const [copiedUtr, setCopiedUtr] = useState<boolean>(false);
+
+  // Detailed Docket Monitoring Sub-Tabs ('profile' | 'entity' | 'territory' | 'declarations' | 'documents' | 'financials' | 'audit' | 'all')
+  const [docketSubTab, setDocketSubTab] = useState<'profile' | 'entity' | 'territory' | 'declarations' | 'documents' | 'financials' | 'audit' | 'all'>('profile');
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  const handleCopyField = (text: string, fieldId: string) => {
+    if (!text) return;
+    navigator.clipboard.writeText(text);
+    setCopiedField(fieldId);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
 
   const handleCopyUtr = (utr: string) => {
     navigator.clipboard.writeText(utr);
@@ -427,31 +448,31 @@ export const ManagementDashboard: React.FC = () => {
 
       <main className="flex-grow pt-24 pb-20">
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
-          {/* Header Banner */}
-          <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-8">
+          {/* Header Banner (Light Theme with Orange Accents) */}
+          <div className="bg-gradient-to-br from-white via-orange-50/70 to-amber-50/40 border border-orange-200/90 rounded-3xl p-6 sm:p-8 text-slate-900 shadow-xl shadow-orange-950/5 mb-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
-                <div className="flex items-center gap-2 text-orange-400 text-xs font-semibold uppercase tracking-wider mb-2">
-                  <ShieldCheck className="w-4 h-4" />
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 border border-orange-200 text-orange-800 text-xs font-semibold uppercase tracking-wider mb-3">
+                  <ShieldCheck className="w-3.5 h-3.5 text-orange-600" />
                   <span>Confidential Management Scrutiny Board</span>
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-950">
                   GenQuantis™ National Command Center
                 </h1>
-                <p className="text-slate-300 text-xs sm:text-sm mt-1 font-light">
+                <p className="text-slate-600 text-xs sm:text-sm mt-1 font-normal">
                   Strict due diligence, document verification, authority matrix enforcement, and territory allocation.
                 </p>
               </div>
 
               {/* Authorized Personnel Badge & Sign Out */}
               <div className="flex items-center gap-3">
-                <div className="bg-white/10 px-4 py-2.5 rounded-2xl border border-white/10 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 flex items-center justify-center font-bold text-xs">
+                <div className="bg-white px-4 py-2.5 rounded-2xl border border-orange-200/80 shadow-xs flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-orange-100 border border-orange-300 text-orange-700 flex items-center justify-center font-bold text-xs">
                     HQ
                   </div>
                   <div className="text-xs">
-                    <span className="text-slate-400 block text-[10px]">Logged in as:</span>
-                    <span className="font-semibold text-white">{adminName}</span>
+                    <span className="text-slate-500 block text-[10px]">Logged in as:</span>
+                    <span className="font-semibold text-slate-900">{adminName}</span>
                   </div>
                 </div>
 
@@ -461,48 +482,48 @@ export const ManagementDashboard: React.FC = () => {
                     AuthStore.logout();
                     navigate('/portal/login?tab=admin');
                   }}
-                  className="px-3.5 py-2.5 rounded-2xl bg-white/10 hover:bg-rose-500/20 hover:border-rose-400/50 border border-white/15 text-slate-300 hover:text-rose-200 text-xs font-semibold transition-all flex items-center gap-1.5 shadow-sm"
+                  className="px-3.5 py-2.5 rounded-2xl bg-white hover:bg-rose-50 hover:border-rose-300 border border-slate-200 text-slate-700 hover:text-rose-700 text-xs font-semibold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
                   title="Sign out of Scrutiny Board"
                 >
-                  <LogOut className="w-3.5 h-3.5" />
+                  <LogOut className="w-3.5 h-3.5 text-rose-600" />
                   <span>Sign Out</span>
                 </button>
               </div>
             </div>
 
-            {/* Quick Metrics Bar */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-2.5 mt-8 pt-6 border-t border-white/10 text-xs">
-              <div className="p-3 bg-white/5 rounded-xl border border-white/10">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">Total Dockets</span>
-                <span className="text-xl font-extrabold text-white">{stats.total}</span>
+            {/* Quick Metrics Bar (Light Theme with Crisp Contrast) */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-2.5 mt-8 pt-6 border-t border-orange-200/80 text-xs">
+              <div className="p-3 bg-white/90 rounded-2xl border border-orange-100 shadow-xs hover:border-orange-200 transition-all">
+                <span className="text-slate-500 block text-[10px] uppercase font-bold tracking-wider">Total Dockets</span>
+                <span className="text-2xl font-extrabold text-slate-900 mt-0.5 block">{stats.total}</span>
               </div>
-              <div className="p-3 bg-white/5 rounded-xl border border-white/10">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">Pan-India</span>
-                <span className="text-xl font-extrabold text-indigo-300">{stats.panIndia}</span>
+              <div className="p-3 bg-white/90 rounded-2xl border border-orange-100 shadow-xs hover:border-orange-200 transition-all">
+                <span className="text-slate-500 block text-[10px] uppercase font-bold tracking-wider">Pan-India</span>
+                <span className="text-2xl font-extrabold text-indigo-700 mt-0.5 block">{stats.panIndia}</span>
               </div>
-              <div className="p-3 bg-white/5 rounded-xl border border-white/10">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">Regional</span>
-                <span className="text-xl font-extrabold text-orange-300">{stats.regional}</span>
+              <div className="p-3 bg-white/90 rounded-2xl border border-orange-100 shadow-xs hover:border-orange-200 transition-all">
+                <span className="text-slate-500 block text-[10px] uppercase font-bold tracking-wider">Regional</span>
+                <span className="text-2xl font-extrabold text-orange-600 mt-0.5 block">{stats.regional}</span>
               </div>
-              <div className="p-3 bg-white/5 rounded-xl border border-white/10">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">Franchise</span>
-                <span className="text-xl font-extrabold text-amber-300">{stats.franchise}</span>
+              <div className="p-3 bg-white/90 rounded-2xl border border-orange-100 shadow-xs hover:border-orange-200 transition-all">
+                <span className="text-slate-500 block text-[10px] uppercase font-bold tracking-wider">Franchise</span>
+                <span className="text-2xl font-extrabold text-amber-700 mt-0.5 block">{stats.franchise}</span>
               </div>
-              <div className="p-3 bg-white/5 rounded-xl border border-white/10">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">Pending Scrutiny</span>
-                <span className="text-xl font-extrabold text-amber-400">{stats.pendingScrutiny}</span>
+              <div className="p-3 bg-white/90 rounded-2xl border border-orange-100 shadow-xs hover:border-orange-200 transition-all">
+                <span className="text-slate-500 block text-[10px] uppercase font-bold tracking-wider">Pending Scrutiny</span>
+                <span className="text-2xl font-extrabold text-amber-600 mt-0.5 block">{stats.pendingScrutiny}</span>
               </div>
-              <div className="p-3 bg-white/5 rounded-xl border border-white/10">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">Approved</span>
-                <span className="text-xl font-extrabold text-emerald-400">{stats.approved}</span>
+              <div className="p-3 bg-white/90 rounded-2xl border border-orange-100 shadow-xs hover:border-orange-200 transition-all">
+                <span className="text-slate-500 block text-[10px] uppercase font-bold tracking-wider">Approved</span>
+                <span className="text-2xl font-extrabold text-emerald-600 mt-0.5 block">{stats.approved}</span>
               </div>
-              <div className={`p-3 rounded-xl border transition-all col-span-2 sm:col-span-1 ${
+              <div className={`p-3 rounded-2xl border transition-all col-span-2 sm:col-span-1 shadow-xs ${
                 stats.pendingPayment > 0 
-                  ? 'bg-amber-500/20 border-amber-400/50 text-amber-300' 
-                  : 'bg-white/5 border-white/10'
+                  ? 'bg-amber-50/90 border-amber-300 text-amber-950' 
+                  : 'bg-white/90 border-orange-100'
               }`}>
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">SBI Payment Verification</span>
-                <span className={`text-xl font-extrabold ${stats.pendingPayment > 0 ? 'text-amber-300 animate-pulse' : 'text-slate-300'}`}>
+                <span className="text-slate-500 block text-[10px] uppercase font-bold tracking-wider">SBI Verification</span>
+                <span className={`text-2xl font-extrabold mt-0.5 block ${stats.pendingPayment > 0 ? 'text-amber-700 animate-pulse' : 'text-slate-700'}`}>
                   {stats.pendingPayment}
                 </span>
               </div>
@@ -522,13 +543,13 @@ export const ManagementDashboard: React.FC = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as any)}
-                    className={`flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl font-semibold transition-all flex-shrink-0 whitespace-nowrap ${
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all flex-shrink-0 whitespace-nowrap cursor-pointer ${
                       isActive
-                        ? 'bg-white text-orange-950 shadow-md font-bold'
-                        : 'bg-white/10 hover:bg-white/20 text-white'
+                        ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/25 font-bold'
+                        : 'bg-white hover:bg-orange-50 text-slate-700 border border-slate-200/90 shadow-xs'
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-orange-600'}`} />
                     <span>{tab.label}</span>
                   </button>
                 );
@@ -779,53 +800,672 @@ export const ManagementDashboard: React.FC = () => {
                           <Mail className="w-3.5 h-3.5 text-orange-600" />
                           <span>Email Docket</span>
                         </a>
+
+                        <button
+                          type="button"
+                          onClick={() => window.print()}
+                          className="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 flex-1 sm:flex-initial text-center cursor-pointer"
+                          title="Print or export comprehensive due diligence dossier"
+                        >
+                          <Printer className="w-3.5 h-3.5 text-slate-600" />
+                          <span>Print Dossier</span>
+                        </button>
                       </div>
                     </div>
 
-                    {/* Applicant & Entity Due Diligence Tabs */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                      {/* Personal Box */}
-                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                        <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                          <Users className="w-3.5 h-3.5 text-orange-600" />
-                          <span>Individual Due Diligence</span>
-                        </h4>
-                        <p><strong>Legal Name:</strong> {selectedApp.individual.fullName}</p>
-                        <p><strong>Govt ID Match:</strong> {selectedApp.individual.nameAsPerGovtId}</p>
-                        <p><strong>DOB / Gender:</strong> {selectedApp.individual.dob} ({selectedApp.individual.gender})</p>
-                        <p><strong>Phone / WhatsApp:</strong> {selectedApp.individual.mobile}</p>
-                        <p><strong>Email:</strong> {selectedApp.individual.email}</p>
-                        <p><strong>Residence:</strong> {selectedApp.individual.residentialAddress}</p>
-                        <p><strong>Total Exp:</strong> {selectedApp.individual.totalExperienceYears} Yrs (Healthcare: {selectedApp.individual.healthcareExperienceYears} Yrs)</p>
-                      </div>
-
-                      {/* Business Box */}
-                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                        <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                          <Building className="w-3.5 h-3.5 text-orange-600" />
-                          <span>Corporate Entity Scrutiny</span>
-                        </h4>
-                        <p><strong>Entity Name:</strong> {selectedApp.business.legalEntityName || 'Individual'}</p>
-                        <p><strong>Constitution:</strong> {selectedApp.business.entityType || '—'}</p>
-                        <p><strong>GSTIN:</strong> {selectedApp.business.gstin || '—'}</p>
-                        <p><strong>CIN / PAN:</strong> {selectedApp.business.cinOrPan || '—'}</p>
-                        <p><strong>Investment Commitment:</strong> {selectedApp.business.investmentCapacity || '—'}</p>
-                        <p><strong>Team Strength:</strong> {selectedApp.business.teamStrength} existing ({selectedApp.business.proposedTeamStrength} dedicated)</p>
-                      </div>
+                    {/* Sub-Navigation Tabs for Scrutiny Monitoring */}
+                    <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-slate-200 scrollbar-none">
+                      {[
+                        { id: 'profile', label: 'Applicant & KYC', icon: Users, count: `${selectedApp.individual.totalExperienceYears}y exp` },
+                        { id: 'entity', label: 'Corporate Entity', icon: Building2, count: selectedApp.business.isApplyingAsEntity ? selectedApp.business.entityType || 'Entity' : 'Individual' },
+                        { id: 'territory', label: 'Territory Scope', icon: MapPin, count: selectedApp.territory.isPanIndia ? 'Pan-India' : `${selectedApp.territory.selectedStates.length} States` },
+                        { id: 'declarations', label: 'Statutory Declarations', icon: ShieldCheck, count: '5 Signed' },
+                        { id: 'documents', label: 'Document Vault', icon: FileCheck, count: `${selectedApp.documents.filter(d => d.status === 'verified').length}/${selectedApp.documents.length}` },
+                        { id: 'financials', label: 'Fee Reconcilement', icon: CreditCard, count: selectedApp.paymentStatus.toUpperCase() },
+                        { id: 'audit', label: 'Audit Trail', icon: Clock, count: selectedApp.auditLogs?.length || 0 },
+                        { id: 'all', label: 'Full Dossier (All Data)', icon: FileText, count: 'Complete' }
+                      ].map(t => {
+                        const Icon = t.icon;
+                        const isCurrent = docketSubTab === t.id;
+                        return (
+                          <button
+                            key={t.id}
+                            type="button"
+                            onClick={() => setDocketSubTab(t.id as any)}
+                            className={`px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
+                              isCurrent
+                                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm font-bold'
+                                : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700'
+                            }`}
+                          >
+                            <Icon className={`w-3.5 h-3.5 ${isCurrent ? 'text-white' : 'text-orange-600'}`} />
+                            <span>{t.label}</span>
+                            {t.count && (
+                              <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-mono ${
+                                isCurrent ? 'bg-white/20 text-white' : 'bg-white text-slate-700 border border-slate-200'
+                              }`}>
+                                {t.count}
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
                     </div>
 
-                    {/* Infrastructure & Capability */}
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1">
-                      <span className="font-bold text-slate-800 uppercase tracking-wider text-[11px] block">
-                        Infrastructure & Clinical Footprint:
-                      </span>
-                      <p className="text-slate-600 leading-relaxed">
-                        {selectedApp.business.infrastructureCapability || 'No infrastructure notes supplied.'}
-                      </p>
-                    </div>
+                    {/* SECTION 1: APPLICANT IDENTITY & KYC */}
+                    {(docketSubTab === 'profile' || docketSubTab === 'all') && (
+                      <div className="space-y-4 animate-fade-in">
+                        {docketSubTab === 'all' && (
+                          <div className="flex items-center gap-2 pt-2 border-t border-slate-200 text-sm font-bold text-slate-900">
+                            <Users className="w-4 h-4 text-orange-600" />
+                            <span>1. Individual Profile & KYC Scrutiny</span>
+                          </div>
+                        )}
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                          {/* Personal Identity Card */}
+                          <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5">
+                            <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5 border-b border-slate-100 pb-2">
+                              <Users className="w-3.5 h-3.5 text-orange-600" />
+                              <span>Personal Identification & Biometrics</span>
+                            </h4>
+                            <div className="space-y-1.5 text-slate-700">
+                              <div className="flex justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">Legal Full Name:</span>
+                                <span className="font-bold text-slate-900">{selectedApp.individual.fullName}</span>
+                              </div>
+                              <div className="flex justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">Govt ID Match Name:</span>
+                                <span className="font-semibold text-slate-900">{selectedApp.individual.nameAsPerGovtId || selectedApp.individual.fullName}</span>
+                              </div>
+                              <div className="flex justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">Date of Birth / Gender:</span>
+                                <span className="font-medium text-slate-800">{selectedApp.individual.dob || '—'} ({selectedApp.individual.gender || '—'})</span>
+                              </div>
+                              <div className="flex justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">Nationality:</span>
+                                <span className="font-medium text-slate-800">{selectedApp.individual.nationality || 'Indian'}</span>
+                              </div>
+                              <div className="flex justify-between py-1">
+                                <span className="text-slate-500">Current Occupation:</span>
+                                <span className="font-semibold text-slate-900">{selectedApp.individual.currentOccupation || '—'}</span>
+                              </div>
+                            </div>
+                          </div>
 
-                    {/* Documents Scrutinized */}
-                    <div className="space-y-3">
+                          {/* Contact & Residential Coordinates Card */}
+                          <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5">
+                            <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5 border-b border-slate-100 pb-2">
+                              <Phone className="w-3.5 h-3.5 text-orange-600" />
+                              <span>Verified Communication & Address</span>
+                            </h4>
+                            <div className="space-y-1.5 text-slate-700">
+                              <div className="flex items-center justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">Mobile Phone:</span>
+                                <div className="flex items-center gap-1.5">
+                                  <a href={`tel:${selectedApp.individual.mobile}`} className="font-bold text-orange-700 hover:underline">
+                                    {selectedApp.individual.mobile}
+                                  </a>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleCopyField(selectedApp.individual.mobile, 'mobile')}
+                                    className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-slate-700"
+                                    title="Copy mobile number"
+                                  >
+                                    {copiedField === 'mobile' ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                                  </button>
+                                </div>
+                              </div>
+                              <div className="flex items-center justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">WhatsApp:</span>
+                                <span className="font-semibold text-slate-800">{selectedApp.individual.whatsapp || selectedApp.individual.mobile}</span>
+                              </div>
+                              <div className="flex items-center justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">Email Address:</span>
+                                <div className="flex items-center gap-1.5">
+                                  <a href={`mailto:${selectedApp.individual.email}`} className="font-bold text-orange-700 hover:underline">
+                                    {selectedApp.individual.email}
+                                  </a>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleCopyField(selectedApp.individual.email, 'email')}
+                                    className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-slate-700"
+                                    title="Copy email"
+                                  >
+                                    {copiedField === 'email' ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                                  </button>
+                                </div>
+                              </div>
+                              <div className="py-1 border-b border-slate-50">
+                                <span className="text-slate-500 block">Permanent Residence:</span>
+                                <span className="font-medium text-slate-800 mt-0.5 block">{selectedApp.individual.residentialAddress || '—'}</span>
+                              </div>
+                              <div className="py-1">
+                                <span className="text-slate-500 block">Correspondence Address:</span>
+                                <span className="font-medium text-slate-800 mt-0.5 block">{selectedApp.individual.correspondenceAddress || selectedApp.individual.residentialAddress || '—'}</span>
+                                <span className="text-[11px] text-slate-500 block mt-0.5">
+                                  {selectedApp.individual.district ? `${selectedApp.individual.district}, ` : ''}{selectedApp.individual.state || ''} {selectedApp.individual.pincode ? `• PIN: ${selectedApp.individual.pincode}` : ''}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Qualifications & Experience Matrix */}
+                        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3">
+                          <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5 border-b border-slate-100 pb-2">
+                            <GraduationCap className="w-3.5 h-3.5 text-orange-600" />
+                            <span>Academic Qualifications & Professional Experience Breakdown</span>
+                          </h4>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                              <span className="text-[10px] uppercase font-bold text-slate-500 block">Educational Qualifications</span>
+                              <p className="font-semibold text-slate-900 leading-relaxed">
+                                {selectedApp.individual.educationalQualification || 'Not specified'}
+                              </p>
+                            </div>
+                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                              <span className="text-[10px] uppercase font-bold text-slate-500 block">Professional & Medical Council Registrations</span>
+                              <p className="font-semibold text-slate-900 leading-relaxed">
+                                {selectedApp.individual.professionalQualification || 'None declared'}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* 5-Pillar Experience Matrix */}
+                          <div className="pt-2">
+                            <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-2">
+                              5-Pillar Experience Scorecard:
+                            </span>
+                            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs">
+                              <div className="p-2.5 rounded-xl bg-orange-50/70 border border-orange-200">
+                                <span className="text-xl font-extrabold text-orange-600 block">{selectedApp.individual.totalExperienceYears}</span>
+                                <span className="text-[10px] font-semibold text-slate-600 uppercase block mt-0.5">Total Years</span>
+                              </div>
+                              <div className="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-200">
+                                <span className="text-xl font-extrabold text-emerald-600 block">{selectedApp.individual.healthcareExperienceYears}</span>
+                                <span className="text-[10px] font-semibold text-slate-600 uppercase block mt-0.5">Healthcare Exp</span>
+                              </div>
+                              <div className="p-2.5 rounded-xl bg-blue-50/70 border border-blue-200">
+                                <span className="text-xl font-extrabold text-blue-600 block">{selectedApp.individual.businessExperienceYears}</span>
+                                <span className="text-[10px] font-semibold text-slate-600 uppercase block mt-0.5">Business Exp</span>
+                              </div>
+                              <div className="p-2.5 rounded-xl bg-amber-50/70 border border-amber-200">
+                                <span className="text-xl font-extrabold text-amber-600 block">{selectedApp.individual.franchiseExperienceYears}</span>
+                                <span className="text-[10px] font-semibold text-slate-600 uppercase block mt-0.5">Franchise Exp</span>
+                              </div>
+                              <div className="p-2.5 rounded-xl bg-purple-50/70 border border-purple-200">
+                                <span className="text-xl font-extrabold text-purple-600 block">{selectedApp.individual.channelPartnerExperienceYears}</span>
+                                <span className="text-[10px] font-semibold text-slate-600 uppercase block mt-0.5">Distribution Exp</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Existing Business Interests & Social Profile */}
+                          <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs border-t border-slate-100">
+                            <div>
+                              <span className="text-slate-500 font-medium block">Existing Commercial Interests:</span>
+                              <p className="font-medium text-slate-800 mt-0.5">
+                                {selectedApp.individual.existingBusinessInterests || 'No other commercial enterprises declared.'}
+                              </p>
+                            </div>
+                            <div>
+                              <span className="text-slate-500 font-medium block">Professional Profile URL:</span>
+                              {selectedApp.individual.linkedinProfile ? (
+                                <a
+                                  href={selectedApp.individual.linkedinProfile}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="font-bold text-orange-600 hover:underline inline-flex items-center gap-1 mt-0.5 break-all"
+                                >
+                                  <span>{selectedApp.individual.linkedinProfile}</span>
+                                  <ExternalLink className="w-3 h-3 flex-shrink-0" />
+                                </a>
+                              ) : (
+                                <span className="text-slate-400 mt-0.5 block">Not provided</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Professional & Character References */}
+                        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5">
+                          <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5 border-b border-slate-100 pb-2">
+                            <UserCheck className="w-3.5 h-3.5 text-orange-600" />
+                            <span>Professional Due Diligence References</span>
+                          </h4>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                              <span className="text-[10px] uppercase font-bold text-orange-600 block">Primary Reference</span>
+                              <p className="font-bold text-slate-900">{selectedApp.individual.reference1Name || 'Not supplied'}</p>
+                              <div className="flex items-center gap-2 text-slate-600">
+                                <span className="text-[11px]">Contact:</span>
+                                <a href={`tel:${selectedApp.individual.reference1Contact}`} className="font-mono font-semibold text-orange-700 hover:underline">
+                                  {selectedApp.individual.reference1Contact || '—'}
+                                </a>
+                              </div>
+                              <p className="text-[11px] text-slate-500">
+                                <strong>Relationship:</strong> {selectedApp.individual.reference1Relation || 'Not specified'}
+                              </p>
+                            </div>
+
+                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                              <span className="text-[10px] uppercase font-bold text-slate-500 block">Secondary Reference</span>
+                              <p className="font-bold text-slate-900">{selectedApp.individual.reference2Name || 'None provided'}</p>
+                              {selectedApp.individual.reference2Contact && (
+                                <div className="flex items-center gap-2 text-slate-600">
+                                  <span className="text-[11px]">Contact:</span>
+                                  <a href={`tel:${selectedApp.individual.reference2Contact}`} className="font-mono font-semibold text-orange-700 hover:underline">
+                                    {selectedApp.individual.reference2Contact}
+                                  </a>
+                                </div>
+                              )}
+                              <p className="text-[11px] text-slate-500">
+                                Secondary referee for clinical background verification.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* SECTION 2: CORPORATE ENTITY & LEGAL PROFILE */}
+                    {(docketSubTab === 'entity' || docketSubTab === 'all') && (
+                      <div className="space-y-4 animate-fade-in">
+                        {docketSubTab === 'all' && (
+                          <div className="flex items-center gap-2 pt-4 border-t border-slate-200 text-sm font-bold text-slate-900">
+                            <Building2 className="w-4 h-4 text-orange-600" />
+                            <span>2. Corporate Entity, MCA & Tax Scrutiny</span>
+                          </div>
+                        )}
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                          {/* Corporate Constitution */}
+                          <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5">
+                            <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5 border-b border-slate-100 pb-2">
+                              <Building className="w-3.5 h-3.5 text-orange-600" />
+                              <span>Entity Constitution & Registration</span>
+                            </h4>
+                            <div className="space-y-1.5 text-slate-700">
+                              <div className="flex justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">Applying Mode:</span>
+                                <span className="font-bold text-slate-900">{selectedApp.business.isApplyingAsEntity ? 'Registered Business Entity' : 'Individual / Proprietor'}</span>
+                              </div>
+                              <div className="flex justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">Legal Entity Name:</span>
+                                <span className="font-bold text-slate-900">{selectedApp.business.legalEntityName || 'Individual Applicant'}</span>
+                              </div>
+                              <div className="flex justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">Trade / Brand Name:</span>
+                                <span className="font-semibold text-slate-800">{selectedApp.business.tradeBrandName || selectedApp.business.legalEntityName || '—'}</span>
+                              </div>
+                              <div className="flex justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">Constitution / Entity Type:</span>
+                                <span className="font-bold px-2 py-0.5 rounded bg-orange-50 text-orange-800 border border-orange-200 text-[11px]">{selectedApp.business.entityType || '—'}</span>
+                              </div>
+                              <div className="flex justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">Date of Incorporation:</span>
+                                <span className="font-medium text-slate-800">{selectedApp.business.dateOfIncorporation || '—'}</span>
+                              </div>
+                              <div className="flex justify-between py-1">
+                                <span className="text-slate-500">Years in Active Operation:</span>
+                                <span className="font-bold text-slate-900">{selectedApp.business.yearsInOperation || 0} Years</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Tax Identifiers & Signatory */}
+                          <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5">
+                            <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5 border-b border-slate-100 pb-2">
+                              <FileCheck2 className="w-3.5 h-3.5 text-orange-600" />
+                              <span>Statutory Tax & Regulatory IDs</span>
+                            </h4>
+                            <div className="space-y-1.5 text-slate-700">
+                              <div className="flex items-center justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">15-Digit GSTIN:</span>
+                                <div className="flex items-center gap-1.5">
+                                  <span className="font-mono font-bold text-slate-900">{selectedApp.business.gstin || 'Not registered'}</span>
+                                  {selectedApp.business.gstin && (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleCopyField(selectedApp.business.gstin || '', 'gstin')}
+                                      className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-slate-700 cursor-pointer"
+                                      title="Copy GSTIN"
+                                    >
+                                      {copiedField === 'gstin' ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="flex items-center justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">CIN / Entity PAN:</span>
+                                <div className="flex items-center gap-1.5">
+                                  <span className="font-mono font-bold text-slate-900">{selectedApp.business.cinOrPan || '—'}</span>
+                                  {selectedApp.business.cinOrPan && (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleCopyField(selectedApp.business.cinOrPan || '', 'cin')}
+                                      className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-slate-700 cursor-pointer"
+                                      title="Copy CIN/PAN"
+                                    >
+                                      {copiedField === 'cin' ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="flex justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">Authorised Signatory:</span>
+                                <span className="font-bold text-slate-900">{selectedApp.business.authorisedSignatoryName || selectedApp.individual.fullName}</span>
+                              </div>
+                              <div className="flex justify-between py-1 border-b border-slate-50">
+                                <span className="text-slate-500">Corporate Designation:</span>
+                                <span className="font-semibold text-slate-800">{selectedApp.business.authorisedSignatoryDesignation || 'Director'}</span>
+                              </div>
+                              <div className="flex justify-between py-1">
+                                <span className="text-slate-500">Investment Commitment:</span>
+                                <span className="font-extrabold text-orange-600">{selectedApp.business.investmentCapacity || '—'}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Addresses & Web Channels */}
+                        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5 text-xs">
+                          <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5 border-b border-slate-100 pb-2">
+                            <MapPin className="w-3.5 h-3.5 text-orange-600" />
+                            <span>Corporate Locations & Web Footprint</span>
+                          </h4>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                              <span className="text-slate-500 font-medium block">Registered Corporate Office:</span>
+                              <p className="font-medium text-slate-900 leading-relaxed">
+                                {selectedApp.business.registeredOffice || selectedApp.individual.residentialAddress || '—'}
+                              </p>
+                            </div>
+                            <div className="space-y-1">
+                              <span className="text-slate-500 font-medium block">Operating Clinics & Facilities:</span>
+                              <p className="font-medium text-slate-900 leading-relaxed">
+                                {selectedApp.business.operatingOffice || 'Identical to registered office'}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-100 text-[11px]">
+                            <div>
+                              <span className="text-slate-500 block">Corporate Website:</span>
+                              {selectedApp.business.website ? (
+                                <a href={selectedApp.business.website} target="_blank" rel="noopener noreferrer" className="font-bold text-orange-600 hover:underline inline-flex items-center gap-1 mt-0.5">
+                                  <span>{selectedApp.business.website}</span>
+                                  <ExternalLink className="w-3 h-3" />
+                                </a>
+                              ) : (
+                                <span className="text-slate-400 mt-0.5 block">None</span>
+                              )}
+                            </div>
+                            <div>
+                              <span className="text-slate-500 block">Corporate Email:</span>
+                              <a href={`mailto:${selectedApp.business.corporateEmail || selectedApp.individual.email}`} className="font-bold text-slate-800 hover:underline mt-0.5 block">
+                                {selectedApp.business.corporateEmail || selectedApp.individual.email}
+                              </a>
+                            </div>
+                            <div>
+                              <span className="text-slate-500 block">Telephone / Board Line:</span>
+                              <span className="font-medium text-slate-800 mt-0.5 block font-mono">
+                                {selectedApp.business.telephone || selectedApp.individual.mobile}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Ownership, Directors & Staff Allocation */}
+                        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3 text-xs">
+                          <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5 border-b border-slate-100 pb-2">
+                            <Users className="w-3.5 h-3.5 text-orange-600" />
+                            <span>Shareholding, Leadership & Human Capital</span>
+                          </h4>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                              <span className="text-[10px] uppercase font-bold text-slate-500 block">Promoters & Directors (Equity Breakdown)</span>
+                              <p className="font-semibold text-slate-900 leading-relaxed">
+                                {selectedApp.business.promotersDirectors || 'Sole Promotorship (100%)'}
+                              </p>
+                            </div>
+                            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                              <span className="text-[10px] uppercase font-bold text-slate-500 block">Key Management & Executive Leads</span>
+                              <p className="font-semibold text-slate-900 leading-relaxed">
+                                {selectedApp.business.keyManagement || 'Direct Promoters Execution'}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+                            <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50">
+                              <span className="text-slate-600 font-medium">Current Total Workforce:</span>
+                              <span className="text-base font-extrabold text-slate-900">{selectedApp.business.teamStrength || 0} Staff</span>
+                            </div>
+                            <div className="flex items-center justify-between p-3 rounded-xl bg-orange-50/80 border border-orange-200/80">
+                              <span className="text-orange-950 font-medium">Proposed Dedicated GenQuantis Staff:</span>
+                              <span className="text-base font-extrabold text-orange-600">{selectedApp.business.proposedTeamStrength || 0} Personnel</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Healthcare Diagnostics Capabilities & Footprint */}
+                        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3 text-xs">
+                          <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5 border-b border-slate-100 pb-2">
+                            <Briefcase className="w-3.5 h-3.5 text-orange-600" />
+                            <span>Healthcare Capabilities & Clinical Footprint</span>
+                          </h4>
+
+                          <div className="space-y-3">
+                            <div>
+                              <span className="text-slate-500 font-medium block">Principal Business Activities:</span>
+                              <p className="font-medium text-slate-900 mt-0.5 leading-relaxed">
+                                {selectedApp.business.principalActivities || 'Clinical laboratory operations, preventive diagnostic health checks, and doctor distribution networks.'}
+                              </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                                <span className="text-[10px] uppercase font-bold text-slate-500 block">Existing Locations & Facilities</span>
+                                <p className="font-medium text-slate-800">
+                                  {selectedApp.business.existingLocations || 'Primary city presence'}
+                                </p>
+                              </div>
+                              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                                <span className="text-[10px] uppercase font-bold text-slate-500 block">Geographic Network Presence</span>
+                                <p className="font-medium text-slate-800">
+                                  {selectedApp.business.geographicPresence || 'Statewide clinical reach'}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="p-3 rounded-xl bg-orange-50/40 border border-orange-200/60 space-y-1">
+                              <span className="text-[10px] uppercase font-bold text-orange-800 block">Clinical Infrastructure & Diagnostic Equipment Capabilities:</span>
+                              <p className="text-slate-700 leading-relaxed">
+                                {selectedApp.business.infrastructureCapability || 'Fully compliant with clinical pathology, AI automated diagnostic screening, and cold-chain sample logistics.'}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* SECTION 3: PROPOSED TERRITORY & NETWORK */}
+                    {(docketSubTab === 'territory' || docketSubTab === 'all') && (
+                      <div className="space-y-4 animate-fade-in">
+                        {docketSubTab === 'all' && (
+                          <div className="flex items-center gap-2 pt-4 border-t border-slate-200 text-sm font-bold text-slate-900">
+                            <MapPin className="w-4 h-4 text-orange-600" />
+                            <span>3. Proposed Healthcare Territory Scope</span>
+                          </div>
+                        )}
+
+                        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4 text-xs">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                            <div>
+                              <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                                <MapPin className="w-3.5 h-3.5 text-orange-600" />
+                                <span>Operational Territory Allocation</span>
+                              </h4>
+                              <p className="text-[11px] text-slate-500 mt-0.5">
+                                Defined geographical boundary for GenQuantis™ diagnostic clinics and distribution rights.
+                              </p>
+                            </div>
+
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 ${
+                              selectedApp.territory.isPanIndia 
+                                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm'
+                                : 'bg-orange-100 text-orange-800 border border-orange-200'
+                            }`}>
+                              {selectedApp.territory.isPanIndia ? 'Pan-India Master Territory' : `Regional: ${selectedApp.territory.selectedStates.length} States / UTs`}
+                            </span>
+                          </div>
+
+                          {/* State Badges Grid */}
+                          <div>
+                            <span className="text-slate-500 font-semibold block mb-2 text-[11px]">
+                              {selectedApp.territory.isPanIndia 
+                                ? 'Master Coverage: All 36 States & Union Territories of India' 
+                                : `Assigned States & Union Territories (${selectedApp.territory.selectedStates.length}):`}
+                            </span>
+
+                            {selectedApp.territory.isPanIndia ? (
+                              <div className="p-4 rounded-xl bg-orange-50/60 border border-orange-200 flex items-center gap-3">
+                                <Globe className="w-8 h-8 text-orange-600 flex-shrink-0" />
+                                <div>
+                                  <p className="font-bold text-slate-900 text-xs">All-India Distribution & Strategic Partnership</p>
+                                  <p className="text-[11px] text-slate-600 mt-0.5">
+                                    Authorised to introduce, appoint, and oversee regional franchise clinics across North, South, East, West, and Central India.
+                                  </p>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="flex flex-wrap gap-2">
+                                {selectedApp.territory.selectedStates.length > 0 ? (
+                                  selectedApp.territory.selectedStates.map((st) => (
+                                    <span
+                                      key={st}
+                                      className="px-3 py-1.5 rounded-xl bg-orange-50 text-orange-800 font-semibold text-xs border border-orange-200 flex items-center gap-1.5"
+                                    >
+                                      <MapPin className="w-3 h-3 text-orange-500" />
+                                      <span>{st}</span>
+                                    </span>
+                                  ))
+                                ) : (
+                                  <span className="text-slate-400 italic">No specific states pre-selected. Defaulting to headquarters zonal allocation.</span>
+                                )}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Strategy & Notes */}
+                          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                            <span className="text-[10px] uppercase font-bold text-slate-500 block">
+                              Proposed Footprint & Regional Logistics Strategy:
+                            </span>
+                            <p className="text-slate-700 leading-relaxed font-medium">
+                              {selectedApp.territory.notes || 'Operating within clinical infrastructure guidelines with prioritized expansion into tier-2/3 diagnostic deserts.'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* SECTION 4: STATUTORY DECLARATIONS & LEGAL COMPLIANCE */}
+                    {(docketSubTab === 'declarations' || docketSubTab === 'all') && (
+                      <div className="space-y-4 animate-fade-in">
+                        {docketSubTab === 'all' && (
+                          <div className="flex items-center gap-2 pt-4 border-t border-slate-200 text-sm font-bold text-slate-900">
+                            <ShieldCheck className="w-4 h-4 text-orange-600" />
+                            <span>4. Statutory Compliance & Digitally Signed Declarations</span>
+                          </div>
+                        )}
+
+                        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3.5 text-xs">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                            <div>
+                              <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                                <Shield className="w-3.5 h-3.5 text-orange-600" />
+                                <span>Statutory Declarations & Integrity Covenant</span>
+                              </h4>
+                              <p className="text-[11px] text-slate-500 mt-0.5">
+                                Digitally consented and logged by the applicant during submission.
+                              </p>
+                            </div>
+                            <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[11px] border border-emerald-200 inline-flex items-center gap-1 self-start sm:self-auto">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                              <span>5/5 Complied & Executed</span>
+                            </span>
+                          </div>
+
+                          <div className="space-y-2.5">
+                            {[
+                              {
+                                title: 'Truthful & Transparent Disclosure Declaration',
+                                desc: 'Affirmed under statutory accountability that all personal credentials, medical qualifications, business financial figures, and corporate documents submitted are genuine, complete, and verifiable.'
+                              },
+                              {
+                                title: 'Speculative ROI Non-Guarantee Acknowledgment',
+                                desc: 'Formally acknowledged that clinical diagnostics revenues depend on doctor adoption, lab throughput, and quality operations, with no fixed or guaranteed financial returns promised by GenQuantis™.'
+                              },
+                              {
+                                title: 'Prohibition on Unauthorized Sub-Franchise Granting',
+                                desc: 'Agreed that authority to appoint channel partners, grant clinical territory licenses, and sign diagnostic memorandums rests exclusively with GenQuantis Headquarters.'
+                              },
+                              {
+                                title: 'Anti-Fraud & Healthcare Regulatory Compliance',
+                                desc: 'Pledged strict compliance with the Clinical Establishments Act, AERB/PCPNDT diagnostic regulations, ICMR ethical standards, and zero tolerance for doctor kickbacks.'
+                              },
+                              {
+                                title: 'Comprehensive Due Diligence & MCA Verification Consent',
+                                desc: 'Granted unconditional consent to the GenQuantis Scrutiny Board to verify bank records, MCA filings, court records, and conduct reference checks with declared institutions.'
+                              }
+                            ].map((item, idx) => (
+                              <div key={idx} className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-start gap-3">
+                                <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                  <Check className="w-3 h-3 font-bold" />
+                                </div>
+                                <div className="space-y-0.5">
+                                  <span className="font-bold text-slate-900 block">{item.title}</span>
+                                  <p className="text-slate-600 text-[11px] leading-relaxed">{item.desc}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Digital Signing Metadata */}
+                          <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-[11px] text-slate-500 bg-slate-50/60 p-3 rounded-xl">
+                            <div>
+                              <span>Digitally Executed by: </span>
+                              <strong className="text-slate-800">{selectedApp.business.authorisedSignatoryName || selectedApp.individual.fullName}</strong>
+                            </div>
+                            <div>
+                              <span>Application Docket Ref: </span>
+                              <strong className="font-mono text-orange-700">{selectedApp.id}</strong>
+                            </div>
+                            <div>
+                              <span>Timestamp: </span>
+                              <strong className="text-slate-700">{new Date(selectedApp.createdAt).toLocaleString('en-IN')}</strong>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* SECTION 5: DOCUMENTS SCRUTINIZED */}
+                    {(docketSubTab === 'documents' || docketSubTab === 'all') && (
+                      <div className="space-y-3 animate-fade-in">
+                        {docketSubTab === 'all' && (
+                          <div className="flex items-center gap-2 pt-4 border-t border-slate-200 text-sm font-bold text-slate-900">
+                            <FileCheck className="w-4 h-4 text-orange-600" />
+                            <span>5. Document Scrutiny & KYC Vault ({selectedApp.documents.length})</span>
+                          </div>
+                        )}
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <h4 className="font-bold text-slate-800 uppercase tracking-wider text-xs flex items-center gap-2">
                           <FileCheck className="w-4 h-4 text-orange-600" />
@@ -924,25 +1564,36 @@ export const ManagementDashboard: React.FC = () => {
                         ))}
                       </div>
                     </div>
-
-                    {/* Feedback Toast if verification / rejection just happened */}
-                    {paymentActionFeedback && (
-                      <div className={`p-4 rounded-2xl border text-xs flex items-center gap-3 animate-fade-in ${
-                        paymentActionFeedback.success 
-                          ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
-                          : 'bg-rose-50 border-rose-200 text-rose-800'
-                      }`}>
-                        {paymentActionFeedback.success ? (
-                          <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                        ) : (
-                          <AlertCircle className="w-5 h-5 text-rose-600 flex-shrink-0" />
-                        )}
-                        <p className="font-medium">{paymentActionFeedback.message}</p>
-                      </div>
                     )}
 
-                    {/* Official SBI Bank Transfer Verification & Reconciliation Panel */}
-                    <div className="rounded-3xl border border-slate-200 bg-white p-5 space-y-4 shadow-sm">
+                    {/* SECTION 6: FINANCIAL RECONCILEMENT & ONBOARDING FEES */}
+                    {(docketSubTab === 'financials' || docketSubTab === 'all') && (
+                      <div className="space-y-4 animate-fade-in">
+                        {docketSubTab === 'all' && (
+                          <div className="flex items-center gap-2 pt-4 border-t border-slate-200 text-sm font-bold text-slate-900">
+                            <CreditCard className="w-4 h-4 text-orange-600" />
+                            <span>6. Financial Due Diligence & Bank Reconcilement</span>
+                          </div>
+                        )}
+
+                        {/* Feedback Toast if verification / rejection just happened */}
+                        {paymentActionFeedback && (
+                          <div className={`p-4 rounded-2xl border text-xs flex items-center gap-3 animate-fade-in ${
+                            paymentActionFeedback.success 
+                              ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
+                              : 'bg-rose-50 border-rose-200 text-rose-800'
+                          }`}>
+                            {paymentActionFeedback.success ? (
+                              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                            ) : (
+                              <AlertCircle className="w-5 h-5 text-rose-600 flex-shrink-0" />
+                            )}
+                            <p className="font-medium">{paymentActionFeedback.message}</p>
+                          </div>
+                        )}
+
+                        {/* Official SBI Bank Transfer Verification & Reconciliation Panel */}
+                        <div className="rounded-3xl border border-slate-200 bg-white p-5 space-y-4 shadow-sm">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
                         <div className="flex items-center gap-2.5">
                           <div className="p-2 rounded-xl bg-orange-50 text-orange-950 border border-orange-100">
@@ -1239,6 +1890,88 @@ export const ManagementDashboard: React.FC = () => {
                         </div>
                       </div>
                     </div>
+                  </div>
+                )}
+
+                {/* SECTION 7: DOCKET SCRUTINY AUDIT TRAIL */}
+                {(docketSubTab === 'audit' || docketSubTab === 'all') && (
+                  <div className="space-y-4 animate-fade-in">
+                    {docketSubTab === 'all' && (
+                      <div className="flex items-center gap-2 pt-4 border-t border-slate-200 text-sm font-bold text-slate-900">
+                        <Clock className="w-4 h-4 text-orange-600" />
+                        <span>7. Scrutiny Board Audit Log & Due Diligence Milestones</span>
+                      </div>
+                    )}
+
+                    <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4 text-xs">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                        <div>
+                          <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5 text-orange-600" />
+                            <span>Complete Immutable Audit Trail</span>
+                          </h4>
+                          <p className="text-[11px] text-slate-500 mt-0.5">
+                            Chronological timestamped scrutiny records for Docket {selectedApp.id}.
+                          </p>
+                        </div>
+
+                        <span className="text-[11px] font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg">
+                          {selectedApp.auditLogs?.length || 0} Actions Recorded
+                        </span>
+                      </div>
+
+                      {/* Status Timeline Progression */}
+                      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
+                        <span className="text-[10px] uppercase font-bold text-slate-500 block">
+                          Diligence Milestones Progression:
+                        </span>
+                        <div className="space-y-1.5">
+                          {selectedApp.statusTimeline?.map((item, idx) => (
+                            <div key={idx} className="flex items-start gap-2.5 text-[11px]">
+                              <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1 flex-shrink-0" />
+                              <div className="min-w-0 flex-grow">
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="font-bold text-slate-800">{item.label}</span>
+                                  {item.completedAt && (
+                                    <span className="text-[10px] text-slate-400 font-mono">
+                                      {new Date(item.completedAt).toLocaleString('en-IN')}
+                                    </span>
+                                  )}
+                                </div>
+                                {item.note && <p className="text-slate-500 mt-0.5">{item.note}</p>}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Audit Event History */}
+                      <div className="space-y-2">
+                        <span className="text-[10px] uppercase font-bold text-slate-500 block">
+                          Executive Audit Event History:
+                        </span>
+                        {selectedApp.auditLogs && selectedApp.auditLogs.length > 0 ? (
+                          selectedApp.auditLogs.map((log) => (
+                            <div key={log.id} className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 space-y-1">
+                              <div className="flex items-center justify-between gap-2 flex-wrap">
+                                <span className="font-bold text-slate-900">{log.action}</span>
+                                <span className="text-[10px] text-slate-500 font-mono">
+                                  {new Date(log.timestamp).toLocaleString('en-IN')}
+                                </span>
+                              </div>
+                              <p className="text-slate-600 text-[11px] leading-relaxed">{log.details}</p>
+                              <span className="text-[10px] font-semibold text-orange-700 block">
+                                Performer: {log.performedBy}
+                              </span>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-slate-400 italic text-[11px]">No additional audit logs recorded.</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
                   </div>
                 ) : (
                   <div className="bg-white rounded-3xl p-12 text-center text-slate-400 border border-slate-200">
