@@ -32,7 +32,7 @@ export function formatApplicantConfirmation(app: PartnerApplication): { subject:
     app.pathway === 'regional' ? 'Regional Channel Partner' :
     'GenQuantis™ Franchise Investor';
 
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8080';
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://partner.genquantis.com';
   const loginUrl = `${origin}/portal/login?appId=${encodeURIComponent(app.id)}`;
 
   const subject = `Your GenQuantis™ Application Reference ID: ${app.id}`;
@@ -155,7 +155,7 @@ ${verifiedDocs}
 [x] IP Non-Disclosure Agreement
 
 Access this docket in the Scrutiny Console:
-${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8080'}/portal/admin
+${typeof window !== 'undefined' ? window.location.origin : 'https://partner.genquantis.com'}/portal/admin
 =====================================================
 `.trim();
 
@@ -187,7 +187,7 @@ export async function sendPartnerApplicationEmail(
   let applicantEmailSent = false;
   let supportEmailSent = false;
 
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8080';
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://partner.genquantis.com';
   const loginUrl = `${origin}/portal/login?appId=${encodeURIComponent(app.id)}`;
 
   // 1. Dispatch confirmation directly to Applicant's Email via EmailJS (Primary) & FormSubmit
