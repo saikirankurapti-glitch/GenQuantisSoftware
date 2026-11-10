@@ -10,11 +10,11 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     proxy: {
       '/api': {
-        target: 'https://curaquantis-h4c8gucpbee7aege.westus3-01.azurewebsites.net',
+        target: 'https://genquantissoftwarebackend-bseqe5e6e6fgdncx.westus3-01.azurewebsites.net',
         changeOrigin: true,
         secure: false,
         headers: {
-          Origin: 'https://agreeable-field-05acfd710.6.azurestaticapps.net',
+          Origin: 'https://white-river-015fad210.8.azurestaticapps.net',
         },
       },
     },
