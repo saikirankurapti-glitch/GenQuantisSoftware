@@ -4,7 +4,7 @@ const STORAGE_KEY_APPLICATIONS = 'genquantis_partner_applications_v1';
 const STORAGE_KEY_LEADS = 'genquantis_investor_leads_v1';
 
 // Base API URL configuration
-const getApiBaseUrl = (): string => {
+export const getApiBaseUrl = (): string => {
   // When running locally in browser, ALWAYS use relative path so requests route through Vite dev proxy without CORS blocking
   if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
     return '';
@@ -13,11 +13,12 @@ const getApiBaseUrl = (): string => {
   if (envUrl && typeof envUrl === 'string' && envUrl.trim() !== '') {
     return envUrl.trim().replace(/\/$/, '');
   }
-  return '';
+  // Production Azure Backend
+  return 'https://genquantissoftwarebackend-bseqe5e6e6fgdncx.westus3-01.azurewebsites.net';
 };
 
-const API_BASE_URL = getApiBaseUrl();
-const API_URL = `${API_BASE_URL}/api/partner`;
+export const API_BASE_URL = getApiBaseUrl();
+export const API_URL = `${API_BASE_URL}/api/partner`;
 
 // Strip large base64 file data URLs before caching in localStorage (5MB browser quota protection)
 function sanitizeApplicationForStorage(app: PartnerApplication): PartnerApplication {
