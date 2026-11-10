@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => ({
         changeOrigin: true,
         secure: false,
         headers: {
-          Origin: 'https://white-river-015fad210.8.azurestaticapps.net',
+          Origin: 'https://partner.genquantis.com',
         },
       },
     },
