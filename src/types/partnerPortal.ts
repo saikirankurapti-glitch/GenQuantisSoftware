@@ -148,6 +148,13 @@ export interface PartnerApplication {
   business: BusinessProfile;
   territory: TerritorySelection;
   documents: DocumentUpload[];
+  declarations?: {
+    truthfulDisclosure: boolean;
+    noRoiGuaranteeAgreed: boolean;
+    noFranchiseAuthorityAgreed: boolean;
+    antiFraudConsent: boolean;
+    privacyPolicyConsent: boolean;
+  };
   clarifications: ClarificationMessage[];
   auditLogs: AuditLogEntry[];
   paymentStatus: 'unbilled' | 'pending' | 'submitted' | 'completed' | 'rejected' | 'exempt';
