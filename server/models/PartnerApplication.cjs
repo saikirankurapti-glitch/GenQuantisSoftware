@@ -124,6 +124,13 @@ const PartnerApplicationSchema = new mongoose.Schema({
   },
 
   documents: [DocumentSchema],
+  declarations: {
+    truthfulDisclosure: { type: Boolean, default: true },
+    noRoiGuaranteeAgreed: { type: Boolean, default: true },
+    noFranchiseAuthorityAgreed: { type: Boolean, default: true },
+    antiFraudConsent: { type: Boolean, default: true },
+    privacyPolicyConsent: { type: Boolean, default: true }
+  },
   clarifications: [ClarificationSchema],
   auditLogs: [AuditLogSchema],
 
